@@ -1,47 +1,52 @@
 import { useState } from "react";
+import Input from "./Input";
+
+import { isEmail, isNotEmpty, hasMinLength, isEqualsToOtherValue } from "../util/validation";
+import { useInput } from "../hooks/useInput";
 
 export default function Login() {
-  // const [enteredEmail, setEnteredEmail] = useState("");
-  // const [enteredPassword, setEnteredPassword] = useState("");
 
-  const [enteredValues, setEnteredValues] = useState({
-    email: "",
-    password: ""
-  });
+  const { value: emailValue, handleInputChange: handleEmailChange, handleInputBlur: handleEmailBlur, hasError: emailHasError } = useInput("", (value) => isEmail(value) && isNotEmpty(value));
+
+  const { value: passwordValue, handleInputChange: handlePasswordChange, handleInputBlur: handlePasswordBlur, hasError: passwordHasError } = useInput("", (value) => hasMinLength(value, 6));
 
   function handleSubmit(event){
     event.preventDefault();
-    console.log("Submitted!" + enteredValues.email + " " + enteredValues.password);
+    
+    if(emailHasError || passwordHasError){
+      return;
+    }
+    
+    console.log("Submitted!" + emailValue + " " + passwordValue);
   }
-
-  function handleInputChange(identifier,event){
-    setEnteredValues(prevValues => ({
-      ...prevValues,
-      [identifier]: event.target.value
-    }));
-  }
-
-  // function handleEmailChange(event){
-  //   setEnteredEmail(event.target.value);
-  // }
-  // function handlePasswordChange(event){
-  //   setEnteredPassword(event.target.value);
-  // }
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>Login</h2>
 
       <div className="control-row">
-        <div className="control no-margin">
-          <label htmlFor="email">Email</label>
-          <input id="email" type="email" name="email" onChange={(event) => handleInputChange("email", event)} value={enteredValues.email}/>
-        </div>
+        <Input 
+        label="Email"
+        id="email"
+        type="email"
+        name="email"
+        onBlur={handleEmailBlur}
+        onChange={handleEmailChange} 
+        value={emailValue}
+        error={emailHasError && "Please enter a valid email address."}
+        />
 
-        <div className="control no-margin">
-          <label htmlFor="password">Password</label>
-          <input id="password" type="password" name="password" onChange={(event) => handleInputChange("password", event)} value={enteredValues.password}/>
-        </div>
+        <Input 
+        label="Password"
+        id="password"
+        type="password"
+        name="password"
+        onBlur={handlePasswordBlur}
+        onChange={handlePasswordChange} 
+        value={passwordValue}
+        error={passwordHasError && "Password must be at least 6 characters long."}
+        />
+
       </div>
 
       <p className="form-actions">
