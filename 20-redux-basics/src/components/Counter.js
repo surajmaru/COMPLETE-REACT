@@ -7,7 +7,7 @@ const Counter = () => {
   const counter = useSelector(state => state.counter);
 
   const incrementHandler = () => {
-    dispatch({ type: "increment" });
+    dispatch({ type: "increment" }); 
   }
 
   const decrementHandler = () => {
