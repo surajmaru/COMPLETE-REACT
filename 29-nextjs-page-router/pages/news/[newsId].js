@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 function DetailsPage() {
   const router = useRouter();
 
-  console.log(router.query.newsId);
+  const newsId = router.query.newsId;
 
   return (
     <>
